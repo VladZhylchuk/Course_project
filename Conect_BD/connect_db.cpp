@@ -1,5 +1,5 @@
 #include "connect_db.h"
-#include "ui_login.h"
+#include "ui_connect_db.h"
 #include<QSqlError>
 #include<QMessageBox>
 #include <QSqlQuery>

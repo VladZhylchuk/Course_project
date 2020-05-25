@@ -11,20 +11,21 @@ regitser::regitser(QWidget *parent) :
     ui->username->setFocus();
 
 
-    //MainWindow main;
 
 
-//    main.db = QSqlDatabase::addDatabase("QODBC");
-//    //db.setDatabaseName("DRIVER={SQL Server};SERVER="+ui->lineEdit->text()+";DATABASE="+ui->lineEdit_2->text()+";Trusted_Connection=yes;");
+    //    main.db = QSqlDatabase::addDatabase("QODBC");
+    //    //db.setDatabaseName("DRIVER={SQL Server};SERVER="+ui->lineEdit->text()+";DATABASE="+ui->lineEdit_2->text()+";Trusted_Connection=yes;");
 
-//    main.db .setDatabaseName("DRIVER={SQL Server};SERVER=DESKTOP-MEP0SC5;DATABASE=Mydb;Trusted_Connection=yes;");
+    //    main.db .setDatabaseName("DRIVER={SQL Server};SERVER=DESKTOP-MEP0SC5;DATABASE=Mydb;Trusted_Connection=yes;");
 
 
-//    if(!main.db.open())
-//    {
-//        QMessageBox::critical(this, "Error", main.db.lastError().text());
+    //    if(!main.db.open())
+    //    {
+    //        QMessageBox::critical(this, "Error", main.db.lastError().text());
 
-//    }
+    //    }
+
+
 
 }
 
@@ -33,7 +34,23 @@ regitser::~regitser()
     delete ui;
 }
 
+int checked(bool check)
+{
+    if(check)
+        return 1;
+    else
+        return 0;
+}
 
+QString removeSpaces2(QString word) {
+    QString newWord;
+    for (int i = 0; i < word.length(); i++) {
+        if (word[i] != ' ') {
+            newWord += word[i];
+        }
+    }
+    return newWord;
+}
 
 void regitser::on_username_returnPressed()
 {
@@ -52,21 +69,27 @@ void regitser::on_password_returnPressed()
 }
 void regitser::on_SignUp_clicked()
 {
+    //введення інформації про користувача
+    bool isAdmin = ui->isAdmin->isChecked();
     bool user_exist = true;
+    qDebug() << isAdmin;
     QString username = ui->username->text();
     QString password = ui->password->text();
     QString repeated_password = ui->repeated_password->text();
-    bool admin = ui->isAdmin->isChecked();
+    QString password_hint =  ui->password_hint->text();
 
     if(repeated_password  != password && ui->repeated_password->text() != nullptr)
     {
         QMessageBox::warning(this,"Warning","Passwords not same");
     }
 
-    QString allusers = "exec ShowAll";
-    QSqlQuery check_user_exists;
+
+
+
 
     //Надо фіксить
+    QString allusers = "exec ShowAll";
+    QSqlQuery check_user_exists;
     if(username != nullptr && password != nullptr)
     {
         //Перевірка чи існує користувач з введеним ім'ям
@@ -75,7 +98,8 @@ void regitser::on_SignUp_clicked()
 
         while(check_user_exists.next()){
             QString name = check_user_exists.record().value(1).toString();
-            if(name.contains(username))
+            name = removeSpaces2(name);
+            if(name == username)
             {
                 QMessageBox::warning(this,"","This user already exists");
                 user_exist = false;
@@ -93,18 +117,20 @@ void regitser::on_SignUp_clicked()
     //Внесення даних про нового користувача до таблиці
     if(user_exist == true && password != nullptr)
     {
-        QString registration_info = "INSERT INTO [dbo].[Default_Users]([login],[password])" "VALUES(:login,:password)";
-
+        //QString registration_info = "INSERT INTO [dbo].[Default_Users]([login],[password])" "VALUES(:login,:password)";
+          QString registration_info = "INSERT INTO [dbo].[Default_Users]([login],[password],[admin],[password_hint])VALUES(:login,:password,:admin,:password_hint)";
 
         QSqlQuery registration_query  ;
         registration_query.prepare(registration_info);
 
         registration_query.bindValue(":login",username);
         registration_query.bindValue(":password",password);
+        registration_query.bindValue(":admin",checked(isAdmin));
+        registration_query.bindValue(":password_hint",password_hint);
+
         registration_query.exec();
         QMessageBox::warning(this,"","SUCCESS");
-        ui->username->setText("");
-        ui->password->setText("");
+        close();
     }
     qDebug()<<"Finally";
 
@@ -112,7 +138,3 @@ void regitser::on_SignUp_clicked()
 
 
 
-void regitser::on_isAdmin_stateChanged(int arg1)
-{
-     QMessageBox::warning(this,"","checked");
-}

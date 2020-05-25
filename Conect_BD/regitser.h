@@ -26,7 +26,7 @@ private slots:
 
 
 
-    void on_isAdmin_stateChanged(int arg1);
+
 
 private:
     Ui::regitser *ui;

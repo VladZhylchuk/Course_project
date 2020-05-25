@@ -27,23 +27,10 @@ public:
     QSqlQuery query;
 
 private slots:
-      void on_Submit_clicked();
-
-
-
+    void on_Submit_clicked();
     void on_SignUp_clicked();
-
-
-
-
-
-
-
-
     void on_username_returnPressed();
-
     void on_password_returnPressed();
-
 private:
     Ui::MainWindow *ui;
 };
