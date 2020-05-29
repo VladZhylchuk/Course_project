@@ -9,7 +9,8 @@
 #include <QSqlQuery>
 #include<QDebug>
 #include"connect_db.h"
-
+#include "useraccount.h"
+#include "adminaccount.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,8 +22,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    //login *logwin;
-
     QSqlDatabase db;
     QSqlQuery query;
 
@@ -33,5 +32,7 @@ private slots:
     void on_password_returnPressed();
 private:
     Ui::MainWindow *ui;
+    UserAccount *user_account;
+    AdminAccount *admin_account;
 };
 #endif // MAINWINDOW_H

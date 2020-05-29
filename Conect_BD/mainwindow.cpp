@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "regitser.h"
-#include<QDebug>
+#include <QDebug>
 #include "connect_db.h"
-
+#include "useraccount.h"
+#include "adminaccount.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
 
 
@@ -51,7 +53,7 @@ void MainWindow::on_Submit_clicked()
     qDebug()<<"Start";
 
 
-    bool user_exist = false;
+
     QString username = ui->username->text();
     QString password = ui->password->text();
     QStringList results;
@@ -69,7 +71,8 @@ void MainWindow::on_Submit_clicked()
         check_user_exists.prepare(allusers);
         check_user_exists.exec();
 
-        while(check_user_exists.next()){
+        while(check_user_exists.next())
+        {
             QString database_username = check_user_exists.record().value(1).toString();
             QString database_password = check_user_exists.record().value(2).toString();
 
@@ -80,26 +83,39 @@ void MainWindow::on_Submit_clicked()
             {
                 if(database_password == password)
                 {
-                    QMessageBox::information(this,"","Entered successfully");
-                    show_message = false;
-                    break;
+                    bool isAdmin =  check_user_exists.record().value(3).toBool();
+                    if(isAdmin)
+                    {
+                        hide();
+                        show_message = false;
+                          admin_account = new AdminAccount(this);
+//                        admin_account.setModal(true);
+//                        admin_account.exec();
+                          admin_account->show();
+                        break;
+                    }
+                    else
+                    {
+                        show_message = false;
+                        this->hide();
+                        user_account = new UserAccount(this);
+//                        user_account->setModal(true);
+//                        user_account->exec();
+                        user_account->show();
+                        break;
+                    }
                 }
                 else
                 {
-                    QMessageBox::information(this,"","Check your password");
+                    QMessageBox::information(this,"","Wrong password");
                     show_message = false;
                     break;
                 }
 
             }
-            else if (show_message)
-            {
-                QMessageBox::information(this,"","Check your login");
-                //QMessageBox::YesRole
-                show_message = true;
-                break;
-            }
+
         }
+        if (show_message){QMessageBox::information(this,"","Wrong login");}
     }
     else
     {
@@ -148,10 +164,10 @@ void MainWindow::on_username_returnPressed()
 }
 
 void MainWindow::on_password_returnPressed()
-{
-    MainWindow main;
+{    
     if(ui->password->text() != nullptr)
-        main.on_Submit_clicked();
+        ui->Submit->click();
+        ui->password->clearFocus();
 }
 
 

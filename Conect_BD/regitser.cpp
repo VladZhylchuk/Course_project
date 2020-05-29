@@ -9,24 +9,6 @@ regitser::regitser(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->username->setFocus();
-
-
-
-
-    //    main.db = QSqlDatabase::addDatabase("QODBC");
-    //    //db.setDatabaseName("DRIVER={SQL Server};SERVER="+ui->lineEdit->text()+";DATABASE="+ui->lineEdit_2->text()+";Trusted_Connection=yes;");
-
-    //    main.db .setDatabaseName("DRIVER={SQL Server};SERVER=DESKTOP-MEP0SC5;DATABASE=Mydb;Trusted_Connection=yes;");
-
-
-    //    if(!main.db.open())
-    //    {
-    //        QMessageBox::critical(this, "Error", main.db.lastError().text());
-
-    //    }
-
-
-
 }
 
 regitser::~regitser()
@@ -55,9 +37,7 @@ QString removeSpaces2(QString word) {
 void regitser::on_username_returnPressed()
 {
     if(ui->username->text() != nullptr)
-    {
         ui->password->setFocus();
-    }
 }
 
 void regitser::on_password_returnPressed()
