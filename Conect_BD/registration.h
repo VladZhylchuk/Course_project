@@ -10,6 +10,8 @@
 #include<QDebug>
 #include"connect_db.h"
 #include "regitser.h"
+#include "adminaccount.h"
+#include "useraccount.h"
 
 namespace Ui {
 class registration;
@@ -34,7 +36,8 @@ private slots:
 
 private:
     Ui::registration *ui;
-
+    UserAccount *user_account;
+    AdminAccount *admin_account;
 
 
 };

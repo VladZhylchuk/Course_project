@@ -16,10 +16,9 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -27,47 +26,65 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
-    QAction *actionConect_database;
+    QAction *actiontest;
+    QAction *actionAbout_program;
     QWidget *centralwidget;
     QWidget *layoutWidget;
+    QVBoxLayout *verticalLayout;
     QGridLayout *gridLayout;
-    QPushButton *SignUp;
-    QPushButton *Submit;
-    QLineEdit *username;
-    QLabel *label;
     QLineEdit *password;
+    QPushButton *Submit;
     QLabel *label_2;
+    QLineEdit *username;
+    QPushButton *SignUp;
+    QLabel *label;
+    QPushButton *password_forget;
+    QPushButton *About;
     QStatusBar *statusbar;
-    QMenuBar *menubar;
-    QMenu *menuMenu;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setWindowModality(Qt::WindowModal);
-        MainWindow->resize(800, 600);
+        MainWindow->resize(522, 400);
+        MainWindow->setMinimumSize(QSize(500, 400));
+        MainWindow->setMaximumSize(QSize(791, 391));
         MainWindow->setContextMenuPolicy(Qt::DefaultContextMenu);
         MainWindow->setLayoutDirection(Qt::LeftToRight);
-        actionConect_database = new QAction(MainWindow);
-        actionConect_database->setObjectName(QString::fromUtf8("actionConect_database"));
+        actiontest = new QAction(MainWindow);
+        actiontest->setObjectName(QString::fromUtf8("actiontest"));
+        actionAbout_program = new QAction(MainWindow);
+        actionAbout_program->setObjectName(QString::fromUtf8("actionAbout_program"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         layoutWidget = new QWidget(centralwidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(220, 170, 311, 141));
-        gridLayout = new QGridLayout(layoutWidget);
+        layoutWidget->setGeometry(QRect(100, 70, 331, 181));
+        verticalLayout = new QVBoxLayout(layoutWidget);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        gridLayout = new QGridLayout();
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        SignUp = new QPushButton(layoutWidget);
-        SignUp->setObjectName(QString::fromUtf8("SignUp"));
+        password = new QLineEdit(layoutWidget);
+        password->setObjectName(QString::fromUtf8("password"));
+        password->setEchoMode(QLineEdit::Password);
+        password->setClearButtonEnabled(true);
 
-        gridLayout->addWidget(SignUp, 2, 0, 1, 1);
+        gridLayout->addWidget(password, 1, 1, 1, 1);
 
         Submit = new QPushButton(layoutWidget);
         Submit->setObjectName(QString::fromUtf8("Submit"));
 
         gridLayout->addWidget(Submit, 2, 1, 1, 1);
+
+        label_2 = new QLabel(layoutWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        QFont font;
+        font.setPointSize(14);
+        label_2->setFont(font);
+
+        gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
         username = new QLineEdit(layoutWidget);
         username->setObjectName(QString::fromUtf8("username"));
@@ -79,53 +96,39 @@ public:
 
         gridLayout->addWidget(username, 0, 1, 1, 1);
 
+        SignUp = new QPushButton(layoutWidget);
+        SignUp->setObjectName(QString::fromUtf8("SignUp"));
+
+        gridLayout->addWidget(SignUp, 2, 0, 1, 1);
+
         label = new QLabel(layoutWidget);
         label->setObjectName(QString::fromUtf8("label"));
-        QFont font;
-        font.setPointSize(14);
         label->setFont(font);
 
         gridLayout->addWidget(label, 0, 0, 1, 1);
 
-        password = new QLineEdit(layoutWidget);
-        password->setObjectName(QString::fromUtf8("password"));
-        password->setEchoMode(QLineEdit::Password);
-        password->setClearButtonEnabled(true);
 
-        gridLayout->addWidget(password, 1, 1, 1, 1);
+        verticalLayout->addLayout(gridLayout);
 
-        label_2 = new QLabel(layoutWidget);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setFont(font);
+        password_forget = new QPushButton(layoutWidget);
+        password_forget->setObjectName(QString::fromUtf8("password_forget"));
 
-        gridLayout->addWidget(label_2, 1, 0, 1, 1);
+        verticalLayout->addWidget(password_forget);
 
-        username->raise();
-        SignUp->raise();
-        Submit->raise();
-        label->raise();
-        password->raise();
-        label_2->raise();
+        About = new QPushButton(centralwidget);
+        About->setObjectName(QString::fromUtf8("About"));
+        About->setGeometry(QRect(100, 260, 81, 21));
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
         MainWindow->setStatusBar(statusbar);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
-        menuMenu = new QMenu(menubar);
-        menuMenu->setObjectName(QString::fromUtf8("menuMenu"));
-        MainWindow->setMenuBar(menubar);
 #if QT_CONFIG(shortcut)
-        label->setBuddy(username);
         label_2->setBuddy(password);
+        label->setBuddy(username);
 #endif // QT_CONFIG(shortcut)
         QWidget::setTabOrder(username, password);
         QWidget::setTabOrder(password, Submit);
         QWidget::setTabOrder(Submit, SignUp);
-
-        menubar->addAction(menuMenu->menuAction());
-        menuMenu->addAction(actionConect_database);
 
         retranslateUi(MainWindow);
 
@@ -135,13 +138,15 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        actionConect_database->setText(QCoreApplication::translate("MainWindow", "Conect database", nullptr));
-        SignUp->setText(QCoreApplication::translate("MainWindow", "SignUp", nullptr));
+        actiontest->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276 \320\277\321\200\320\276\320\263\321\200\320\260\320\274\321\203", nullptr));
+        actionAbout_program->setText(QCoreApplication::translate("MainWindow", "About program", nullptr));
         Submit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
-        username->setText(QString());
-        label->setText(QCoreApplication::translate("MainWindow", "login", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "password", nullptr));
-        menuMenu->setTitle(QCoreApplication::translate("MainWindow", "Menu", nullptr));
+        username->setText(QString());
+        SignUp->setText(QCoreApplication::translate("MainWindow", "SignUp", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "login", nullptr));
+        password_forget->setText(QCoreApplication::translate("MainWindow", "Forget password ?", nullptr));
+        About->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
     } // retranslateUi
 
 };

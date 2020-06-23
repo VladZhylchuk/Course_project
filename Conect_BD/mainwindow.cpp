@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     db.setDatabaseName("DRIVER={SQL Server};SERVER=DESKTOP-MEP0SC5;DATABASE=Mydb;Trusted_Connection=yes;");
 
 
+
     if(!db.open())
     {
         QMessageBox::critical(this, "Error", db.lastError().text());
@@ -75,6 +76,7 @@ void MainWindow::on_Submit_clicked()
         {
             QString database_username = check_user_exists.record().value(1).toString();
             QString database_password = check_user_exists.record().value(2).toString();
+            QString database_password_hint = check_user_exists.record().value(4).toString();
 
             database_username = removeSpaces(database_username);
             database_password = removeSpaces(database_password);
@@ -88,20 +90,22 @@ void MainWindow::on_Submit_clicked()
                     {
                         hide();
                         show_message = false;
-                          admin_account = new AdminAccount(this);
-//                        admin_account.setModal(true);
-//                        admin_account.exec();
-                          admin_account->show();
+                         // admin_account = new AdminAccount(this);
+                          AdminAccount admin_account ;
+                          admin_account.setModal(true);
+                          admin_account.exec();
+                          //admin_account->show();
                         break;
                     }
                     else
                     {
                         show_message = false;
                         this->hide();
-                        user_account = new UserAccount(this);
-//                        user_account->setModal(true);
-//                        user_account->exec();
-                        user_account->show();
+                        //user_account = new UserAccount(this);
+                        UserAccount user_account;
+                        user_account.setModal(true);
+                        user_account.exec();
+                        //user_account.show();
                         break;
                     }
                 }
@@ -115,32 +119,13 @@ void MainWindow::on_Submit_clicked()
             }
 
         }
-        if (show_message){QMessageBox::information(this,"","Wrong login");}
+        if (show_message){QMessageBox::information(this,""," This user does not exist ");}
     }
     else
     {
         QMessageBox::warning(this,"","enter your login/password please");
         show_message = false;
     }
-
-
-
-    //    //Внесення даних про нового користувача до таблиці
-    //    if(user_exist == true && password != nullptr)
-    //    {
-    //        QString registration_info = "INSERT INTO [dbo].[Default_Users]([login],[password])" "VALUES(:login,:password)";
-
-
-    //        QSqlQuery registration_query  ;
-    //        registration_query.prepare(registration_info);
-
-    //        registration_query.bindValue(":login",username);
-    //        registration_query.bindValue(":password",password);
-    //        registration_query.exec();
-    //        QMessageBox::warning(this,"","SUCCESS");
-    //        ui->username->setText("");
-    //        ui->password->setText("");
-    //    }
     qDebug()<<"Finally";
 
 }
@@ -171,3 +156,53 @@ void MainWindow::on_password_returnPressed()
 }
 
 
+
+
+
+
+void MainWindow::on_password_forget_clicked()
+{
+    QString allusers = "exec ShowAll";
+    QSqlQuery check_user_exists;
+    QString username = ui->username->text();
+
+
+
+    if(username != nullptr )
+    {
+        check_user_exists.prepare(allusers);
+        check_user_exists.exec();
+
+        while(check_user_exists.next())
+        {
+
+
+            QString database_username = check_user_exists.record().value(1).toString();
+            QString password_hint = check_user_exists.record().value(4).toString();
+            database_username = removeSpaces(database_username);
+
+
+            if(database_username == username)
+            {
+                QMessageBox::information(this, "","Your hint is " +  password_hint);
+            }
+        }
+    }
+    else
+    {
+        QMessageBox::information(this, "", "Enter your username please");
+    }
+}
+
+
+
+
+
+
+
+void MainWindow::on_About_clicked()
+{
+    About_Program about;
+    about.setModal(true);
+    about.exec();
+}
